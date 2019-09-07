@@ -3,3 +3,9 @@ clarify_boosted = {
     'the red city': ["potatoes", "carrots", "iron ingot"],
     'claybound': ["cooked salmon"]
 }
+
+aliases = {
+    'Quartz': 'Quartz Crystal',
+    'Potatoes': 'Baked Potatoes',
+    'Nether Wart': 'Nether Wart Block'
+}

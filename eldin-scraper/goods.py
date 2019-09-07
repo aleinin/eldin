@@ -20,38 +20,33 @@ def get_boost_building(good):
     elif good in gem:
         return "gem polisher"
     else:
-        return "-1"
-
-
-# helper
-def extract_tier(build):
-    tier_extract = re.search('T[1-3]?', build)
-    if tier_extract:
-        tier = tier_extract.group(0)
-    return tier.replace("T", "")
-
+        return None
 
 # called
 def get_price_tier(good, buildings, city):
+    tier = None
+    if good.lower() in boostable:
+        tier = 0
     boost_building = get_boost_building(good)
+    if not boost_building:
+        return tier
     city = city.lower()
-    tier = 0
-    for build in buildings:
+    for buildingObj in buildings:
+        build = buildingObj[0]
         if boost_building.lower() in build.lower():
             if good in ore:
-                tier = extract_tier(build)
+                tier = buildingObj[1]
             else:
                 # For things other than ore, it's possible to have multiple goods that COULD be boosted
                 # by the same economic building. Buildings can only boost one however.
                 # described more here: https://github.com/aleinin/eldinscraper/issues/1
                 if city in clarify_boosted:
                     if good.lower() in clarify_boosted[city]:
-                        tier = extract_tier(build)
+                        tier = buildingObj[1]
                     # else tier = 0
                 else:
-                    tier = extract_tier(build)
+                    tier = buildingObj[1]
     return tier
-
 
 # helper
 def get_boost_percent(good):
@@ -91,7 +86,7 @@ boostable = [
     "pumpkin pie",
     "cake",
     "carrots",
-    "potatoes",
+    "baked potatoes",
     "apple",
     "melon blocks",
     "iron ingot",
@@ -103,7 +98,7 @@ boostable = [
 ]
 
 ore = [
-    "quartz",
+    "quartz crystal",
     "redstone dust",
     "coal",
     "lapis lazuli",
@@ -128,7 +123,7 @@ butcher = [
 
 grocer = [
     "carrots",
-    "potatoes",
+    "baked potatoes",
     "apple",
     "melon block"
 ]

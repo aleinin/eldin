@@ -9,8 +9,7 @@ exports.index = function(req, res) {
 };
 
 exports.get = function(req, res) {
-  const query = `SELECT * FROM buildings WHERE \`building\`=${req.params.buildings_id}`;
-  console.log(query);
+  const query = `SELECT * FROM buildings WHERE \`building\`='${req.params.buildings_id}'`;
   con.query(query, (err, rows) => {
     if (err) throw err;
     res.json(rows);

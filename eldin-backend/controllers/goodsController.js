@@ -1,15 +1,23 @@
 var con = require("../db");
 
 exports.index = function(req, res) {
-  con.query("SELECT * FROM goods", (err, rows) => {
+  con.query("SELECT * FROM goods", (err, goods) => {
     if (err) throw err;
-    res.json(rows);
+    con.query("SELECT * FROM sells", (err, sells) => {
+      if (err) throw err;
+
+      goods.forEach(good => {
+        good.soldIn = sells.filter(sell => sell.good === good.name).length;
+        return good;
+      });
+      res.json(goods);
+    });
   });
 };
 
 exports.get = function(req, res) {
   const resObj = {};
-  const goodsClause = `\`Name\`='${req.params.goods_id}'`;
+  const goodsClause = `\`name\`='${req.params.goods_id}'`;
   const sellsClause = `\`good\`='${req.params.goods_id}'`;
 
   const goodsQuery = `SELECT * FROM goods WHERE ${goodsClause}`;

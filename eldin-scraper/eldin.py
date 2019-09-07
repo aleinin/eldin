@@ -3,6 +3,7 @@ from urllib.request import urlopen
 from time import sleep
 from write_to_db import write
 from goods import get_boosted_prices, get_price_tier, get_boost_building
+from clarify import aliases
 
 shop_page = "https://www.worldofeldin.com/server-information/server-shops/"
 people_page = "https://www.worldofeldin.com/portal/tableview/"
@@ -96,14 +97,21 @@ def scrape_details(link):
                 in_market = True
             elif in_buildings:
                 if key_value[0] != "":
-                    buildings.append(key_value[0])
+                    building = key_value[0].split(" - T")
+                    if len(building) > 1:
+                        buildings.append([building[0], building[1]])
+                    else:
+                        buildings.append([building[0], None])
                 else:
                     in_buildings = False
                     city["buildings"] = buildings
             elif in_market:
                 if key_value[0] != "":
-                    tier = get_price_tier(key_value[0], buildings, city_name)
-                    items.append([key_value[0], tier])
+                    market_item = key_value[0]
+                    if market_item in aliases:
+                        market_item = aliases[market_item]
+                    tier = get_price_tier(market_item, buildings, city_name)
+                    items.append([market_item, tier])
                 else:
                     in_market = False
                     city["items"] = items
