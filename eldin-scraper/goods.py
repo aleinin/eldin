@@ -22,14 +22,12 @@ def get_boost_building(good):
     else:
         return None
 
-# called
+
 def get_price_tier(good, buildings, city):
-    tier = None
-    if good.lower() in boostable:
-        tier = 0
+    tier = 0
     boost_building = get_boost_building(good)
-    if not boost_building:
-        return tier
+    if good.lower() not in boostable or not boost_building:
+        return None
     city = city.lower()
     for buildingObj in buildings:
         build = buildingObj[0]
@@ -37,16 +35,13 @@ def get_price_tier(good, buildings, city):
             if good in ore:
                 tier = buildingObj[1]
             else:
-                # For things other than ore, it's possible to have multiple goods that COULD be boosted
-                # by the same economic building. Buildings can only boost one however.
-                # described more here: https://github.com/aleinin/eldinscraper/issues/1
                 if city in clarify_boosted:
                     if good.lower() in clarify_boosted[city]:
                         tier = buildingObj[1]
-                    # else tier = 0
                 else:
                     tier = buildingObj[1]
     return tier
+
 
 # helper
 def get_boost_percent(good):

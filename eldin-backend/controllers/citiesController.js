@@ -1,27 +1,10 @@
 var con = require("../db");
-
 exports.index = function(req, res) {
-  con.query("SELECT * FROM cities", (err, cities) => {
+  const query =
+    "SELECT t1.cityName as name, t1.userName as owner, t1.citySize, t1.totalTiles, t1.population, t1.nation, t2.hasMarket FROM (SELECT cities.cityName, owns.userName, cities.citySize, cities.totalTiles, cities.population, cities.nation FROM cities INNER JOIN owns ON cities.cityName=owns.cityName WHERE owns.isPrimary=true) as t1, (SELECT cityName, CASE WHEN building='Market' THEN true ELSE false END AS hasMarket FROM buildings GROUP BY cityName) as t2 WHERE t1.cityName = t2.cityName";
+  con.query(query, (err, rows) => {
     if (err) throw err;
-    con.query("SELECT * FROM owns", (err, owners) => {
-      if (err) throw err;
-      con.query(
-        "SELECT * FROM buildings WHERE `building`='Market'",
-        (err, buildings) => {
-          if (err) throw err;
-          cities.forEach(city => {
-            city.owners = owners
-              .filter(owner => owner.cityName === city.cityName)
-              .map(owner => owner.userName);
-            city.hasMarket =
-              buildings.filter(building => building.cityName === city.cityName)
-                .length > 0;
-            return city;
-          });
-          res.json(cities);
-        }
-      );
-    });
+    res.json(rows);
   });
 };
 

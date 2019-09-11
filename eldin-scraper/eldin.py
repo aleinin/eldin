@@ -159,11 +159,10 @@ def check_for_boost_error(cities):
         goods = city['items']
         for good in goods:
             # if good is boosted
-            if good[1] != 0:
+            if good[1] != 0 and good[1] is not None:
                 if get_boost_building(good[0]) in city_boost_buildings:
                     print("Warning: Possible issue #1 error")
-                    print(city['City Name'])
-                    print(get_boost_building(good[0]))
+                    print("{} {}:{}".format(city['City Name'], get_boost_building(good[0]), good[0]))
                 else:
                     city_boost_buildings.append(get_boost_building(good[0]))
 

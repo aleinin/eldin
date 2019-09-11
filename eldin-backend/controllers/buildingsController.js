@@ -1,37 +1,44 @@
 var con = require("../db");
 
 exports.index = function(req, res) {
-  con.query("SELECT * FROM buildings", (err, rows) => {
-    if (err) throw err;
-    rows = rows.map(row => row.building);
-    res.json(createBuildingsRes(rows));
-  });
+  con.query(
+    "SELECT building, tier as tiered, count(*) as foundIn from buildings group by building",
+    (err, rows) => {
+      if (err) throw err;
+      rows.map(row => {
+        row.tiered = row.tiered !== null ? "Yes" : "No";
+      });
+      res.json(rows);
+    }
+  );
 };
 
 exports.get = function(req, res) {
-  const query = `SELECT * FROM buildings WHERE \`building\`='${req.params.buildings_id}'`;
-  con.query(query, (err, rows) => {
-    if (err) throw err;
-    res.json(rows);
-  });
-};
-
-function count(itemToCount, list) {
-  let count = 0;
-  for (let item of list) {
-    if (item === itemToCount) {
-      count += 1;
+  resObj = {};
+  con.query(
+    `SELECT building, tier as tiered, count(*) as foundIn from buildings WHERE building='${req.params.buildings_id}' group by building `,
+    (err, rows) => {
+      if (err) throw err;
+      rows.map(row => {
+        row.tiered = row.tiered !== null ? "Yes" : "No";
+      });
+      resObj.info = rows[0];
+      const query = `SELECT * FROM buildings WHERE \`building\`='${req.params.buildings_id}'`;
+      con.query(query, (err, rows) => {
+        if (err) throw err;
+        resObj.built = rows;
+        resObj.built.map(cityBuilt => {
+          if (cityBuilt.tier === 1) {
+            cityBuilt.tier = "T1";
+          } else if (cityBuilt.tier === 2) {
+            cityBuilt.tier = "T2";
+          } else if (cityBuilt.tier === 3) {
+            cityBuilt.tier = "T3";
+          }
+          return cityBuilt;
+        });
+        res.json(resObj);
+      });
     }
-  }
-  return count;
-}
-
-function createBuildingsRes(list) {
-  let resp = [];
-  while (list.length > 0) {
-    const foundIn = count(list[0], list);
-    resp.push({ building: list[0], foundIn });
-    list = list.filter(row => row !== list[0]);
-  }
-  return resp;
-}
+  );
+};

@@ -9,7 +9,7 @@ exports.index = function(req, res) {
 
 exports.get = function(req, res) {
   const resObj = {};
-  const whereClause = `\`userName\`='${req.params.people_id}'`;
+  const whereClause = `\`Username\`='${req.params.people_id}'`;
 
   const peopleQuery = `SELECT * FROM people WHERE ${whereClause}`;
   const helpsQuery = `SELECT * FROM helps WHERE ${whereClause}`;
