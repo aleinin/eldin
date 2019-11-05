@@ -10,9 +10,10 @@ exports.index = function(req, res) {
 };
 
 exports.get = function(req, res) {
+  request = req.params.goods_id.replace("'", "''");
   const resObj = {};
-  const goodsClause = ` WHERE \`Name\`='${req.params.goods_id}'`;
-  const sellsClause = `\`good\`='${req.params.goods_id}'`;
+  const goodsClause = ` WHERE \`Name\`='${request}'`;
+  const sellsClause = `\`good\`='${request}'`;
 
   const sellsQuery = `SELECT * FROM sells WHERE ${sellsClause}`;
   con.query(goodsQuery + goodsClause, (err, rows) => {

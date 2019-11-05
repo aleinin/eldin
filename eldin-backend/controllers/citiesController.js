@@ -4,13 +4,19 @@ exports.index = function(req, res) {
     "SELECT t1.cityName as name, t1.userName as owner, t1.citySize, t1.totalTiles, t1.population, t1.nation, t2.hasMarket FROM (SELECT cities.cityName, owns.userName, cities.citySize, cities.totalTiles, cities.population, cities.nation FROM cities INNER JOIN owns ON cities.cityName=owns.cityName WHERE owns.isPrimary=true) as t1, (SELECT cityName, CASE WHEN building='Market' THEN true ELSE false END AS hasMarket FROM buildings GROUP BY cityName) as t2 WHERE t1.cityName = t2.cityName";
   con.query(query, (err, rows) => {
     if (err) throw err;
+    rows.forEach(row => {
+      const newRow = row;
+      newRow.hasMarket = row.hasMarket ? "Yes" : "No";
+      return newRow;
+    });
     res.json(rows);
   });
 };
 
 exports.get = function(req, res) {
+  request = req.params.city_id.replace("'", "''");
   const resObj = {};
-  const whereClause = `\`cityName\`='${req.params.city_id}'`;
+  const whereClause = `\`cityName\`='${request}'`;
 
   const citiesQuery = `SELECT * FROM cities WHERE ${whereClause}`;
   const buildingsQuery = `SELECT * FROM buildings WHERE ${whereClause}`;

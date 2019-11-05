@@ -4,6 +4,7 @@ from time import sleep
 from write_to_db import write
 from goods import get_boosted_prices, get_price_tier, get_boost_building
 from clarify import aliases
+from write_email import alert_failure
 
 shop_page = "https://www.worldofeldin.com/server-information/server-shops/"
 people_page = "https://www.worldofeldin.com/portal/tableview/"
@@ -192,8 +193,11 @@ def scrape_eldin():
 
 
 def main():
-    people, cities, goods = scrape_eldin()
-    write(people, cities, goods)
+    try:
+        people, cities, goods = scrape_eldin()
+        write(people, cities, goods)
+    except Exception as e:
+        alert_failure(e)
 
 
 if __name__ == "__main__": main()
