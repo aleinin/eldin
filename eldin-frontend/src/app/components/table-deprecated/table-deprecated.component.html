@@ -1,0 +1,66 @@
+<p-card *ngIf="values; else loading" [style]="{'border-top':color}">
+
+  <p-table
+    #dt
+    (sortFunction)="customSort($event)"
+    [columns]="cols"
+    [customSort]="true"
+    [paginator]="true"
+    [rows]="50"
+    [scrollable]="true"
+    [style]="{width:'100%'}"
+    [value]="values"
+  >
+    <ng-template pTemplate="caption">
+      <div class="header-container" style="text-align: right">
+
+        <div class="search-bar">
+          <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+          <input
+            (input)="dt.filterGlobal($event.target.value, 'contains')"
+            pInputText size="50"
+            style="width:100%"
+            type="text"
+          >
+        </div>
+        <span *ngIf="title" class="table-title">{{title}}</span>
+      </div>
+    </ng-template>
+    <ng-template let-columns pTemplate="header">
+      <tr>
+        <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+          {{col.header}}
+          <p-sortIcon
+            [field]="col.field"
+            ariaLabel="Activate to sort"
+            ariaLabelAsc="Activate to sort in ascending order"
+            ariaLabelDesc="Activate to sort in descending order"
+          ></p-sortIcon>
+        </th>
+        <th *ngIf="moreInfo">More Info</th>
+      </tr>
+    </ng-template>
+    <ng-template let-columns="columns" let-rowData pTemplate="body">
+      <tr>
+        <td *ngFor="let col of columns; let i = index" [class]="col.centered ? 'center' : 'left'">
+          <a *ngIf="col.link && rowData[col.field] !== 'None'; else rest"
+             [routerLink]="'/' + col.link + '/' + rowData[col.field].replace(' ♔', '')">{{rowData[col.field]}}</a>
+          <ng-template #rest>{{rowData[col.field]}}</ng-template>
+
+        </td>
+        <td *ngIf="moreInfo" class="center">
+          <p-button (click)="route(rowData[columns[0].field], columns[0].link)"
+                    icon="fa fa-angle-double-right"></p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <p class="updated">{{lastUpdated | async}}</p>
+</p-card>
+<ng-template #loading>
+  <p-card>
+    <div class="spinner">
+      <p-progressSpinner></p-progressSpinner>
+    </div>
+  </p-card>
+</ng-template>

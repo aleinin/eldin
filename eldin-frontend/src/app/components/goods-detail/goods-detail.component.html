@@ -1,0 +1,31 @@
+<div *ngIf="goods$ | async as good">
+  <app-header
+    [items]="breadCrumb"
+    [title]="title"
+  ></app-header>
+  <p-card [style]="{'margin-bottom':'20px', 'border-top':'2px solid green'}" class="detail-info">
+    <fieldset>
+      <legend><strong>Info</strong></legend>
+      <p>Base Buy: {{good.info.buy}} </p>
+      <p>Base Sell: {{good.info.sell}} </p>
+      <p>Boostable?: {{good.info.boostable ? 'Yes' : 'No'}} </p>
+      <p>Traded by: {{good.info.tradedIn}} cities</p>
+    </fieldset>
+    <fieldset *ngIf="good.info.boostable">
+      <legend><strong>Boosted Prices</strong></legend>
+      <p class="boost">Boost Building: <a
+        [routerLink]="'/buildings/' + toTitleCase(good.info.boostBuilding)">{{toTitleCase(good.info.boostBuilding)}}</a>
+      </p>
+      <p>T1 Sell: {{good.info.t1}} </p>
+      <p>T2 Sell: {{good.info.t2}} </p>
+      <p>T3 Sell: {{good.info.t3}} </p>
+    </fieldset>
+  </p-card>
+  <app-table
+    [cols]="cols"
+    [moreInfo]=false
+    [values]="good.sells"
+    color="2px solid orange"
+    title="Traded by:"
+  ></app-table>
+</div>

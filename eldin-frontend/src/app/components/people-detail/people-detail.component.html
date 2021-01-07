@@ -1,0 +1,42 @@
+<div *ngIf="person$ | async as person">
+  <app-header
+    [items]="breadCrumb"
+    [title]="title"
+  ></app-header>
+  <p-card [style]="{'margin-bottom':'20px', 'border-top':'2px solid green'}" class="detail-info">
+    <fieldset>
+      <legend><strong>Info</strong></legend>
+      <p class="rank">Rank: {{person.info.rank}} </p>
+      <legend><strong>Tile Ownership:</strong></legend>
+      <p>Total Tiles: {{person.info.total}}</p>
+      <p>Wild Tiles: {{person.info.wild}}</p>
+      <p>City Tiles: {{person.info.city}}</p>
+      <p>Nether Tiles: {{person.info.nether}}</p>
+      <p>End Tiles: {{person.info.end}}</p>
+    </fieldset>
+    <fieldset>
+      <legend><strong>Helper in</strong></legend>
+      <span *ngIf="person.helps.length === 0">None</span>
+      <div *ngFor="let helper of person.helps" class="owner-helper">
+        <a [routerLink]="'/cities/' + helper.cityName" class>{{helper.cityName}}</a>
+        <br>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend><strong>Owner of</strong></legend>
+      <span *ngIf="person.owns.length === 0">None</span>
+      <div *ngFor="let owner of person.owns" class="owner-helper">
+        <a [routerLink]="'/cities/' + owner.cityName">{{owner.cityName}}</a>
+        <br>
+      </div>
+
+    </fieldset>
+  </p-card>
+  <app-table
+    [cols]="cols"
+    [moreInfo]=false
+    [values]="person.lives"
+    color="2px solid orange"
+    title="Resident of:"
+  ></app-table>
+</div>

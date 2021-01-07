@@ -1,0 +1,12 @@
+<p-card>
+  <div *ngIf="status === Status.LOADING; else failure" class="spinner">
+    <p-progressSpinner></p-progressSpinner>
+  </div>
+  <ng-template #failure>
+    <div class="error-page">
+      <h1>500</h1>
+      <h2>Internal server error</h2>
+      <p>Please try refreshing the page. Feel free to contact if the problem persists</p>
+    </div>
+  </ng-template>
+</p-card>

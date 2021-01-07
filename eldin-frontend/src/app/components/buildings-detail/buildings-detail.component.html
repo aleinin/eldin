@@ -1,0 +1,13 @@
+<div *ngIf="buildings$ | async as building">
+  <app-header
+    [items]="breadCrumb"
+    [title]="title"
+  ></app-header>
+  <app-table
+    [cols]="building.info.tiered === 'Yes' ? tieredCols : noTierCols"
+    [moreInfo]=false
+    [values]="building.built"
+    color="2px solid orange"
+    title="Built in:"
+  ></app-table>
+</div>

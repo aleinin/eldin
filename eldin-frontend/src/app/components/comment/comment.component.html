@@ -1,0 +1,29 @@
+<app-header
+  [items]="items"
+  title="Feedback"
+></app-header>
+<p-card>
+  <h4>Hey! Something not working? Out of place? Just doesn't look right? Let me know here</h4>
+  <p-card [formGroup]="form">
+    <div class="form">
+      <div class="control">
+        <p>Issue<span class="required">*</span></p>
+        <p-dropdown formControlName="category" [options]="categories" placeholder="Select a category"></p-dropdown>
+      </div>
+      <div class="control">
+        <p>Page(s) Affected (Optional)</p>
+        <p-multiSelect [options]="pages" formControlName="pages" [panelStyle]="{minWidth:'12em'}"></p-multiSelect>
+      </div>
+      <div class="control">
+        <p>Comments<span class="required">*</span></p>
+        <textarea rows="5" cols="30" pInputTextarea formControlName="comments"></textarea>
+      </div>
+      <div class="control">
+        <p-captcha siteKey="6LdvMbgUAAAAABJpkxuqtECiLEh7mQNM8ZYdgybU" (onResponse)="showResponse($event)"></p-captcha>
+      </div>
+    </div>
+    <button [disabled]="!form.valid" pButton type="button" label="Submit" class="ui-button-rounded control"></button>
+  </p-card>
+  <p>here</p>
+  <p>{{form.value | json }}</p>
+</p-card>

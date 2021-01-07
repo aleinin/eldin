@@ -1,0 +1,68 @@
+<div *ngIf="cities$ | async as city">
+  <app-header
+    [items]="breadCrumb"
+    [title]="title"
+  ></app-header>
+  <p-card [style]="{'margin-bottom':'20px', 'border-top':'2px solid green'}" class="detail-info">
+    <fieldset>
+      <legend><strong>About</strong></legend>
+      <p>City Name: {{city.info.cityName}}</p>
+      <p>City Size: {{city.info.citySize}}</p>
+      <p class="spacer">Nation: <a
+        [routerLink]="'/nations/' + city.info.nation.replace(' ♔', '')">{{city.info.nation}}</a></p>
+
+      <ng-container *ngFor="let owner of city.owns; let i = index">
+        <p>{{getNumbering(i)}} Owner: <a [routerLink]="'/people/' + owner.userName">{{owner.userName}}</a></p>
+      </ng-container>
+
+      <div class="spacer"></div>
+
+      <ng-container *ngFor="let helper of city.helps; let i = index">
+        <p>{{getNumbering(i)}} Helper: <a [routerLink]="'/people/' + helper.userName">{{helper.userName}}</a></p>
+      </ng-container>
+    </fieldset>
+    <fieldset>
+      <legend><strong>Details</strong></legend>
+      <p>Population: {{city.info.population}}</p>
+      <p>Total Tiles: {{city.info.totalTiles}}</p>
+      <p>Coordinates: {{city.info.coordinates.replace("to", '/')}}</p>
+      <p>Tiles Sold: {{city.info.tilesSold}}</p>
+      <p>Max Sellable: {{city.info.maxSellable}}</p>
+    </fieldset>
+    <fieldset>
+      <legend><strong>Building</strong></legend>
+      <ng-container *ngFor="let building of city.buildings">
+        <div class="linkable">
+          <a *ngIf="building.tier === null; else tier"
+             [routerLink]="'/buildings/' + building.building">{{building.building}}</a>
+          <ng-template #tier>
+            <a [routerLink]="'/buildings/' + building.building">{{building.building}} (T{{building.tier}})</a>
+          </ng-template>
+          <br>
+        </div>
+
+      </ng-container>
+    </fieldset>
+    <fieldset>
+      <legend><strong>Market Good</strong></legend>
+      <ng-container *ngFor="let good of city.sells">
+        <div class="linkable">
+          <a *ngIf="good.tier === null; else tier" [routerLink]="'/goods/' + good.good"
+             class="linkable">{{good.good}}</a>
+          <ng-template #tier>
+            <a [routerLink]="'/goods/' + good.good" class="linkable">{{good.good}} (T{{good.tier}})</a>
+          </ng-template>
+
+          <br>
+        </div>
+      </ng-container>
+    </fieldset>
+  </p-card>
+  <app-table
+    [cols]="cols"
+    [moreInfo]=false
+    [values]="city.lives"
+    color="2px solid orange"
+    title="Residents:"
+  ></app-table>
+</div>

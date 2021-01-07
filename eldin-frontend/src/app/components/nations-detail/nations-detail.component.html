@@ -1,0 +1,27 @@
+<div *ngIf="nation$ | async as nation">
+  <app-header
+    [items]="breadCrumb"
+    [title]="title"
+  ></app-header>
+  <p-card [style]="{'margin-bottom':'20px', 'border-top':'2px solid green'}" class="detail-info">
+    <fieldset>
+      <legend><strong>Info</strong></legend>
+      <p>Leader: <a [routerLink]="'/people/' + nation.info.owner">{{nation.info.owner}}</a></p>
+      <p>Capital: <a [routerLink]="'/cities/' + nation.info.capital">{{nation.info.capital}}</a></p>
+      <p>Members: {{nation.info.members}}</p>
+    </fieldset>
+    <fieldset>
+      <legend><strong>Nation Buildings</strong></legend>
+      <ng-container *ngFor="let building of nation.buildings">
+        <p><a [routerLink]="'/buildings/' + building">{{building}}</a></p>
+      </ng-container>
+    </fieldset>
+  </p-card>
+  <app-table
+    [cols]="members"
+    [moreInfo]=false
+    [values]="nation.members"
+    color="2px solid orange"
+    title="Members:"
+  ></app-table>
+</div>

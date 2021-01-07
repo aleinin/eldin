@@ -1,0 +1,14 @@
+<app-header
+  [items]="items"
+  title="Nations"
+></app-header>
+<app-table
+  *ngIf="(nationQuery.selectStatus() | async) === Status.SUCCESS; else loadComponent"
+  [cols]="cols"
+  [values]="nations | async"
+></app-table>
+<ng-template #loadComponent>
+  <app-error-page
+    [status]="nationQuery.selectStatus() | async"
+  ></app-error-page>
+</ng-template>

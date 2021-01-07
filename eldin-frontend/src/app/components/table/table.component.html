@@ -1,0 +1,44 @@
+<p-card [style]="{'border-top':color}">
+  <div class="header-container" style="text-align: right">
+    <div class="search-container">
+      <input
+        (keyup)="updateFilter($event)"
+        class="search"
+        type="text"
+      />
+      <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+    </div>
+    <span *ngIf="title" class="table-title">{{title}}</span>
+  </div>
+  <ngx-datatable
+    [columnMode]="ColumnMode.flex"
+    [footerHeight]="50"
+    [headerHeight]="50"
+    [limit]="50"
+    [rows]="values"
+    class="material"
+    rowHeight="auto"
+  >
+    <ngx-datatable-column
+      *ngFor="let col of cols"
+      [cellClass]="col.centered? 'center-cell' : ''"
+      [comparator]="customSort"
+      [flexGrow]="col.flex"
+      [name]="col.header"
+      [prop]="col.field"
+    >
+      <ng-template class="cell" let-expanded="expanded" let-row="row" let-value="value" ngx-datatable-cell-template>
+        <a *ngIf="col.link && value !== 'None'; else rest"
+           [routerLink]="'/' + col.link + '/' + value.replace(' ♔', '')">{{value}}</a>
+        <ng-template #rest>{{value}}</ng-template>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column *ngIf="moreInfo" [flexGrow]="1" cellClass="center-cell" class="center" name="More Info">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        <p-button (click)="route(row[cols[0].field], cols[0].link)"
+                  icon="fa fa-angle-double-right"></p-button>
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>
+  <p class="updated">{{lastUpdated | async}}</p>
+</p-card>

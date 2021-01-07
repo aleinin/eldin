@@ -1,0 +1,25 @@
+.updated {
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  color: #777;
+}
+
+p-card .spinner {
+  display: flex;
+  justify-content: center;
+}
+
+.table-title {
+  font-size: 25px;
+  font-weight: normal;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row-reverse;
+}
+
+.search-bar {
+  display: flex;
+}

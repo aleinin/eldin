@@ -1,0 +1,40 @@
+<aside [ngClass]="hidden" class="main-sidebar">
+  <ul class="sidebar-menu">
+    <li>
+      <a [ngClass]="activeTab === 'people' ? 'active' : 'not-active'" [routerLink]="'/people'">
+        <i class="fa fa-address-book">
+        </i>
+        <span>People</span>
+      </a>
+    </li>
+    <li>
+      <a [ngClass]="activeTab === 'cities' ? 'active' : 'not-active'" [routerLink]="'/cities'">
+        <i class="fa fa-map-signs">
+        </i>
+        <span>Cities</span>
+      </a>
+    </li>
+    <li>
+      <a [ngClass]="activeTab === 'goods' ? 'active' : 'not-active'" [routerLink]="'/goods'">
+        <i class="fa fa-shopping-basket">
+        </i>
+        <span>Market Goods</span>
+      </a>
+    </li>
+    <li>
+      <a [ngClass]="activeTab === 'buildings' ? 'active' : 'not-active'" [routerLink]="'/buildings'">
+        <i class="fa fa-university">
+        </i>
+        <span>Buildings</span>
+      </a>
+    </li>
+    <li>
+      <a [ngClass]="activeTab === 'nations' ? 'active' : 'not-active'" [routerLink]="'/nations'">
+        <i class="fa fa-flag">
+        </i>
+        <span>Nations</span>
+      </a>
+    </li>
+  </ul>
+</aside>
+

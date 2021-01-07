@@ -1,0 +1,14 @@
+<app-header
+  [items]="items"
+  title="Building"
+></app-header>
+<app-table
+  *ngIf="(buildingsQuery.selectStatus() | async) === Status.SUCCESS; else loadComponent"
+  [cols]="cols"
+  [values]="buildings | async"
+></app-table>
+<ng-template #loadComponent>
+  <app-error-page
+    [status]="buildingsQuery.selectStatus() | async"
+  ></app-error-page>
+</ng-template>
